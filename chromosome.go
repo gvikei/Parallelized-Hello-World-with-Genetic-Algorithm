@@ -8,7 +8,8 @@ import (
 )
 
 type Chromosome struct {
-	gene string
+	gene    string
+	fitness float64
 }
 
 /*
@@ -34,7 +35,6 @@ func geneToString(s string) string {
 		if err == nil {
 			ans = append(ans, string(x))
 		}
-
 	}
 	return strings.Join(ans, "")
 }
@@ -42,7 +42,7 @@ func geneToString(s string) string {
 /*
  See how far the current string is from the target string
 */
-func getScore(chr Chromosome, target string) float64 {
+func getFitness(chr Chromosome, target string) float64 {
 	ans := float64(0)
 	tmp := geneToString(chr.gene)
 	for i := range target {
@@ -70,13 +70,7 @@ func mutate(chr Chromosome, rate float64) Chromosome {
 */
 func crossOver(pa1 Chromosome, pa2 Chromosome, rate float64) []Chromosome {
 	var index int = int(rate * float64(len(pa1.gene)-1))
-
 	var child1 Chromosome = Chromosome{pa1.gene[0:index] + pa2.gene[index+1:len(pa2.gene)]}
 	var child2 Chromosome = Chromosome{pa2.gene[0:index] + pa1.gene[index+1:len(pa1.gene)]}
-
 	return []Chromosome{child1, child2}
-}
-
-func main() {
-
 }
