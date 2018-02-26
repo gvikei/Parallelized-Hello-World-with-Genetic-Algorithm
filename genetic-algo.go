@@ -8,19 +8,21 @@ import (
 	"time"
 )
 
-var TARGET_STR = "Hello World"
-var MAX_ITERS = 100000
+var TARGET_STR = ""
+var MAX_ITERS = 0
+var INIT_N = 0
 var randomizer *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func _parse_args() {
 	flag.StringVar(&TARGET_STR, "target", "Hello World", "Target string to be auto-generated")
-	flag.IntVar(&MAX_ITERS, "max-iterations", 100000, "Max number of iterations to run the algorithm")
+	flag.IntVar(&MAX_ITERS, "max-iterations", 10000, "Max number of iterations to run the algorithm")
+	flag.IntVar(&INIT_N, "population-size", 10, "The population size")
 	flag.Parse()
 }
 
 func main() {
 	_parse_args()
-	population := makePopulation(20)
+	population := makePopulation(INIT_N)
 	fmt.Println("Init population:")
 	for i := range population.genome {
 		fmt.Println(population.genome[i])
