@@ -22,7 +22,6 @@ func makeChromosome(geneLen int) Chromosome {
 
 func makePopulation(n int) Population {
 	var p = Population{make([]Chromosome, n)}
-	// randomizer := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := range p.genome {
 		p.genome[i] = makeChromosome(len(TARGET_STR))
 	}
