@@ -32,12 +32,13 @@ func makePopulation(n int) Population {
 func (s byFitness) Len() int {
 	return len(s)
 }
+
 func (s byFitness) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
+
 func (s byFitness) Less(i, j int) bool {
-	// Reverse order - chromosome with larger fitness comes first
-	return s[i].fitness > s[j].fitness
+	return s[i].fitness > s[j].fitness // Larger comes first
 }
 
 func pickBestM(p Population, m int) []Chromosome {
@@ -46,6 +47,8 @@ func pickBestM(p Population, m int) []Chromosome {
 }
 
 func addToPopulation(p Population, chr Chromosome) {
-	p.genome[len(p.genome)-1] = chr
-	sort.Sort(byFitness(p.genome))
+	if chr.fitness > p.genome[len(p.genome)-1].fitness {
+		p.genome[len(p.genome)-1] = chr
+		sort.Sort(byFitness(p.genome))
+	}
 }

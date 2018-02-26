@@ -12,16 +12,18 @@ const MAX_ITERS = 100000
 const CROSS_OVER_RATE = 0.7
 const MUTATION_RATE = 0.45
 
+var randomizer *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
+
 func main() {
 	randomizer := rand.New(rand.NewSource(time.Now().UnixNano()))
-	population := makePopulation(10)
+	population := makePopulation(20)
 	fmt.Println("New population created: ")
 	fmt.Println(population)
 
 	var n_iters int = 0
 	var children []Chromosome
 	var done = false
-	for n_iters < MAX_ITERS || done {
+	for n_iters < MAX_ITERS && !done {
 		var parents []Chromosome = pickBestM(population, 2)
 		children = crossOver(parents[0], parents[1], randomizer.Float64())
 		for i := range children {

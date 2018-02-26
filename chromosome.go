@@ -1,8 +1,7 @@
 package main
 
 import (
-	"math/rand"
-	"time"
+	"strings"
 )
 
 type Chromosome struct {
@@ -24,7 +23,6 @@ func getFitness(cur string, target string) float64 {
 }
 
 func getRandomChar() string {
-	randomizer := rand.New(rand.NewSource(time.Now().UnixNano()))
 	chars := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ")
 	return string(chars[(randomizer.Int() % len(chars))])
 }
@@ -33,8 +31,19 @@ func getRandomChar() string {
  Flip one random bit along the gene as to mutate
 */
 func mutate(chr Chromosome, rate float64) Chromosome {
-	var index int = int(rate * float64(len(chr.gene)-1))
-	var ans string = chr.gene[0:index] + getRandomChar() + chr.gene[index+1:len(chr.gene)]
+	var index int = len(chr.gene) - 1
+	var tmp int = int(rate * float64(len(chr.gene)))
+	if tmp < index {
+		index = tmp
+	}
+
+	ok := false
+	// Force mutation to be different from the previous gene
+	var ans string
+	for !ok {
+		ans = chr.gene[0:index] + getRandomChar() + chr.gene[index+1:len(chr.gene)]
+		ok = strings.Compare(ans, chr.gene) != 0
+	}
 	return Chromosome{ans, getFitness(ans, TARGET_STR)}
 }
 
