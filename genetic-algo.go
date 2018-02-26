@@ -5,15 +5,14 @@ import (
 )
 
 const TARGET_STR = "Hello World"
-const MAX_ITERS = 10
+const MAX_ITERS = 10000
 const CROSS_OVER_RATE = 0.7
 const MUTATION_RATE = 0.45
 
 func main() {
 	population := makePopulation(10)
-	for i := range population.genome {
-		fmt.Println(population.genome[i])
-	}
+	fmt.Println("New population created: ")
+	fmt.Println(population)
 
 	var n_iters int = 0
 	var children []Chromosome
@@ -22,9 +21,13 @@ func main() {
 		children = crossOver(parents[0], parents[1], CROSS_OVER_RATE)
 		for i := range children {
 			child := mutate(children[i], MUTATION_RATE)
-			fmt.Printf("%s %d\n", child, len(child.gene))
+			// 			fmt.Print("new child: ")
+			// 			fmt.Println(child)
 			addToPopulation(population, child)
 		}
 		n_iters += 1
 	}
+
+	fmt.Println("Current population")
+	fmt.Println(population)
 }

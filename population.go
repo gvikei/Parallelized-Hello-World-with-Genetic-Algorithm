@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"math/rand"
 	"sort"
-	"time"
+	"strings"
 )
 
 type byFitness []Chromosome
@@ -13,24 +11,22 @@ type Population struct {
 	genome []Chromosome
 }
 
-func makeChromosome(geneLen int, randomizer *rand.Rand) Chromosome {
-	chars := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ")
-	var ans []rune = make([]rune, geneLen)
+func makeChromosome(geneLen int) Chromosome {
+	var ans []string = make([]string, geneLen)
 	for i := 0; i < geneLen; i++ {
-		ans[i] = chars[(randomizer.Int() % len(chars))]
+		ans[i] = getRandomChar()
 	}
-	gene := string(ans)
-	chr := Chromosome{gene, getFitness(gene, TARGET_STR)}
-	fmt.Println(chr)
-	return chr
+	gene := strings.Join(ans, "")
+	return Chromosome{gene, getFitness(gene, TARGET_STR)}
 }
 
 func makePopulation(n int) Population {
 	var p = Population{make([]Chromosome, n)}
-	randomizer := rand.New(rand.NewSource(time.Now().UnixNano()))
+	// randomizer := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := range p.genome {
-		p.genome[i] = makeChromosome(len(TARGET_STR), randomizer)
+		p.genome[i] = makeChromosome(len(TARGET_STR))
 	}
+	sort.Sort(byFitness(p.genome))
 	return p
 }
 
@@ -47,7 +43,6 @@ func (s byFitness) Less(i, j int) bool {
 
 func pickBestM(p Population, m int) []Chromosome {
 	sort.Sort(byFitness(p.genome))
-	fmt.Println(p.genome)
 	return p.genome[0:m]
 }
 
