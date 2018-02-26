@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"strings"
 )
 
@@ -16,10 +17,10 @@ func getFitness(cur string, target string) float64 {
 	ans := float64(0)
 	for i := range target {
 		if target[i] != cur[i] {
-			ans += 1
+			ans += math.Abs(float64(target[i]) - float64(cur[i]))
 		}
 	}
-	return float64(len(target)) - ans
+	return -ans
 }
 
 func getRandomChar() string {
@@ -48,7 +49,7 @@ func mutate(chr Chromosome, rate float64) Chromosome {
 }
 
 /*
- Create a new child from 2 parents
+ Create 2 chilren from 2 parents
 */
 func crossOver(pa1 Chromosome, pa2 Chromosome, rate float64) []Chromosome {
 	var index int = int(rate * float64(len(pa1.gene)-1))

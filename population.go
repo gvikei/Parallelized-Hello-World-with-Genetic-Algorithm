@@ -20,7 +20,7 @@ func makeChromosome(geneLen int) Chromosome {
 	return Chromosome{gene, getFitness(gene, TARGET_STR)}
 }
 
-func makePopulation(n int) Population {
+func initPopulation(n int) Population {
 	var p = Population{make([]Chromosome, n)}
 	for i := range p.genome {
 		p.genome[i] = makeChromosome(len(TARGET_STR))
