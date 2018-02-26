@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 )
@@ -44,14 +43,22 @@ func geneToString(s string) string {
 */
 func getFitness(cur string, target string) float64 {
 	ans := float64(0)
+	// for i := range target {
+	// 	ans += math.Abs(float64(target[i]) - float64(cur[i]))
+	// }
+	// if ans == 0 {
+	// 	return 1.0
+	// } else {
+	// 	return 1.0 / float64(ans)
+	// }
+	fmt.Printf("comparing: %s %s\n", cur, target)
+
 	for i := range target {
-		ans += math.Abs(float64(target[i]) - float64(cur[i]))
+		if target[i] != cur[i] {
+			ans += 1
+		}
 	}
-	if ans == 0 {
-		return 1.0
-	} else {
-		return 1.0 / float64(ans)
-	}
+	return float64(len(target)) - ans
 }
 
 /*
@@ -69,8 +76,8 @@ func mutate(chr Chromosome, rate float64) Chromosome {
 */
 func crossOver(pa1 Chromosome, pa2 Chromosome, rate float64) []Chromosome {
 	var index int = int(rate * float64(len(pa1.gene)-1))
-	var gene1 = pa1.gene[0:index] + pa2.gene[index+1:len(pa2.gene)]
-	var gene2 = pa2.gene[0:index] + pa1.gene[index+1:len(pa1.gene)]
+	var gene1 = pa1.gene[0:index] + pa2.gene[index:len(pa2.gene)]
+	var gene2 = pa2.gene[0:index] + pa1.gene[index:len(pa1.gene)]
 	var child1 Chromosome = Chromosome{gene1, getFitness(gene1, TARGET_STR)}
 	var child2 Chromosome = Chromosome{gene2, getFitness(gene2, TARGET_STR)}
 	return []Chromosome{child1, child2}
